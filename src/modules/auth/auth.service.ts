@@ -3,6 +3,10 @@ import * as bcrypt from 'bcrypt';
 import {JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/modules/users/users.service';
 
+export interface Token {
+    id:number
+    email:string
+}
 @Injectable()
 export class AuthService {
     constructor(
@@ -10,8 +14,8 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async validateUser(username: string, pass: string) {
-        const user = await this.userService.findOneByEmail(username);
+    async validateUser(email: string, pass: string) {
+        const user = await this.userService.findOneByEmail(email);
         if (!user) {
             return null;
         }
@@ -21,7 +25,7 @@ export class AuthService {
             return null;
         }
 
-        const { password, ...result } = user['dataValues'];
+        const { password, ...result } = user.dataValues
         return result;
     }
 
@@ -38,7 +42,7 @@ export class AuthService {
 
         const { password, ...result } = newUser['dataValues'];
 
-        const token = await this.generateToken(result);
+        const token = await this.generateToken({id:result.id, email:result.email});
 
         return { user: result, token };
        } catch (error) {
@@ -46,8 +50,8 @@ export class AuthService {
        }
     }
 
-    private async generateToken(user) {
-        const token = await this.jwtService.sign({...user}, {secret:process.env.JWTKEY, expiresIn:'10mins'});
+    private async generateToken(user : Token) {
+        const token = await this.jwtService.sign({...user}, {secret:'aaa', expiresIn:'10mins'});
         return token;
     }
 

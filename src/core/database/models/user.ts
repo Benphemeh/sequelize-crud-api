@@ -17,7 +17,7 @@ import {
          allowNull: false, 
        })
    id: number
-   
+
     @Column({
          type: DataType.STRING,
           allowNull: false, 
@@ -42,5 +42,3 @@ import {
     })
     gender: string;
   }
-
-  

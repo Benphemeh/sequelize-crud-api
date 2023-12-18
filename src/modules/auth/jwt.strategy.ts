@@ -2,6 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/modules/users/users.service';
+import { Token } from './auth.service';
 
 
 @Injectable()
@@ -14,11 +15,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: any) {
+    async validate(payload: Token) {
+        console.log(payload);
+        
         const user = await this.userService.findOneById(payload.id);
         if (!user) {
             throw new UnauthorizedException('You are not authorized to perform the operation');
         }
-        return payload;
+        return payload
     }
 }
