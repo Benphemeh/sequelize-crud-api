@@ -51,7 +51,7 @@ export class AuthService {
     }
 
     private async generateToken(user : Token) {
-        const token = await this.jwtService.sign({...user}, {secret:'aaa', expiresIn:'10mins'});
+        const token = await this.jwtService.sign({...user}, {secret: process.env.JWTKEY, expiresIn:'10mins'});
         return token;
     }
 

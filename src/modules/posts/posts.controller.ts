@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, NotFoundException, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { PostsService } from './posts.service';
 import { JwtStrategy } from '../auth/jwt.strategy';
@@ -7,7 +7,7 @@ import PostModel from 'src/core/database/models/post';
 import { PostDto } from './dto/post.dto';
 import { Request } from 'express';
 import { Token } from '../auth/auth.service';
-import { log } from 'console';
+
 
 @Controller('posts')
 export class PostsController {
@@ -33,11 +33,11 @@ export class PostsController {
     async create(@Body() post: PostDto, @Req() req: AuthUser): Promise<PostModel> {
       console.log(req.user);
       
-        return await this.postService.create(post, req.user?.id);
+        return await this.postService.create(post, 1);
     }
 
     @UseGuards(JwtStrategy)
-    @Put(':id')
+    @Patch(':id')
     async update(@Param('id') id: number, @Body() post: PostDto, @Req() req): Promise<PostModel> {
         const { numberOfAffectedRows, updatedPost } = await this.postService.update(id, post, req.user.id);
         if (numberOfAffectedRows === 0) {

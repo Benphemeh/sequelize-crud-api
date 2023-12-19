@@ -13,6 +13,7 @@ export class ValidateInputPipe extends ValidationPipe {
    }
 
    private handleError(errors) {
+    console.log(errors, 'ssssss');
         return errors.map(error => error.constraints);
    }
 }
