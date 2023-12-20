@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/modules/users/users.service';
+import { MailService } from 'src/mail/mail.service';
+import { IMail } from 'src/core/interface';
 
 export interface Token {
     id:number
@@ -12,8 +14,9 @@ export class AuthService {
     constructor(
         private readonly userService: UsersService,
         private readonly jwtService: JwtService,
+        private readonly mailService: MailService
     ) { }
-
+    
     async validateUser(email: string, pass: string) {
         const user = await this.userService.findOneByEmail(email);
         if (!user) {
@@ -40,9 +43,10 @@ export class AuthService {
 
         const newUser = await this.userService.create({ ...user, password: pass });
 
-        const { password, ...result } = newUser['dataValues'];
+        const { password, ...result } = newUser.dataValues
 
         const token = await this.generateToken({id:result.id, email:result.email});
+        this.sendSignUpEmail(user,)
 
         return { user: result, token };
        } catch (error) {
@@ -64,4 +68,9 @@ export class AuthService {
         const match = await bcrypt.compare(enteredPassword, dbPassword);
         return match;
     }
+    async sendSignUpEmail(user: IMail) {
+        const token = Math.floor(1000 + Math.random() * 9000).toString();
+        await this.mailService.sendUserConfirmation(user, token);
+      }
+    
 }
