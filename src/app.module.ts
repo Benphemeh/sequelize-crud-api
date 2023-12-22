@@ -8,12 +8,12 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { MailModule } from './mail/mail.module';
-
+import { ChatGateway } from './chat/chat.gateway';
 
 
 @Module({
   imports: [AuthModule, BookmarkModule, DatabaseModule, ConfigModule.forRoot({isGlobal:true}), UsersModule, PostsModule, MailModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}
