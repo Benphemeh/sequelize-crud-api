@@ -4,12 +4,10 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-    constructor(private userService: any) { }
+  constructor(private userService: any) {}
 
-    @Get()
-    findAllUsers(): string {
-        return this.userService.findAll();
-    }
+  @Get()
+  findAllUsers(): string {
+    return this.userService.findAll();
+  }
 }
-
-
