@@ -6,7 +6,7 @@ dotenv.config();
 
 export const databaseConfig: IDatabaseConfig = {
     development: {
-        username: process.env.DB_USE,
+        username: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME_DEVELOPMENT,
         host: process.env.DB_HOST,

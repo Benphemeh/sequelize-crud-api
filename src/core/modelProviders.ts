@@ -13,6 +13,4 @@ export const modelProviders = [{
     useValue: Post, 
 },
 
-
-
 ];
