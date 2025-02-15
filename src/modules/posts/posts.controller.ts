@@ -1,9 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, NotFoundException, UseGuards, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { PostsService } from './posts.service';
 import { JwtStrategy } from '../auth/jwt.strategy';
 import PostModel from 'src/core/database/models/post';
-
 import { PostDto } from './dto/post.dto';
 import { Request } from 'express';
 import { Token } from '../auth/auth.service';
@@ -58,6 +56,7 @@ export class PostsController {
         return 'Successfully deleted';
     }
 }
+
 
 interface AuthUser extends Request {
     user: Token;
