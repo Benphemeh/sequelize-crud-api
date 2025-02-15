@@ -8,15 +8,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     MailerModule.forRootAsync({
-       imports: [ConfigModule], 
+      imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
-       
-transport: {
-  host: process.env.MAIL_HOST,
-  secure: false,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD,
+        transport: {
+          host: process.env.MAIL_HOST,
+          secure: false,
+          auth: {
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASSWORD,
           },
         },
         defaults: {
@@ -37,5 +36,3 @@ transport: {
   exports: [MailService],
 })
 export class MailModule {}
-
-

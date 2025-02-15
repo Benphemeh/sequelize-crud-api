@@ -1,1 +1,1 @@
-export { IMail } from "./mail.interface";
+export { IMail } from './mail.interface';

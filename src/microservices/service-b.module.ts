@@ -7,4 +7,3 @@ import { ServiceBService } from './service-b.service';
   providers: [ServiceBService],
 })
 export class ServiceBModule {}
-
