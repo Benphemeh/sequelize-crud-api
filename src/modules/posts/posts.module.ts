@@ -6,12 +6,8 @@ import { JwtStrategy } from '../auth/jwt.strategy';
 import { UsersService } from '../users/users.service';
 import { modelProviders } from 'src/core/modelProviders';
 
-
-
-
-
 @Module({
-  providers: [PostsService, ...modelProviders, JwtStrategy, UsersService,],
-  controllers: [PostsController]
+  providers: [PostsService, ...modelProviders, JwtStrategy, UsersService],
+  controllers: [PostsController],
 })
 export class PostsModule {}

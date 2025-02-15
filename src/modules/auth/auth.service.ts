@@ -1,76 +1,84 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import {JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/modules/users/users.service';
 import { MailService } from 'src/mail/mail.service';
 import { IMail } from 'src/core/interface';
 
 export interface Token {
-    id:number
-    email:string
+  id: number;
+  email: string;
 }
 @Injectable()
 export class AuthService {
-    constructor(
-        private readonly userService: UsersService,
-        private readonly jwtService: JwtService,
-        private readonly mailService: MailService
-    ) { }
-    
-    async validateUser(email: string, pass: string) {
-        const user = await this.userService.findOneByEmail(email);
-        if (!user) {
-            return null;
-        }
+  constructor(
+    private readonly userService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
+  ) {}
 
-        const match = await this.comparePassword(pass, user.password);
-        if (!match) {
-            return null;
-        }
-
-        const { password, ...result } = user.dataValues
-        return result;
+  async validateUser(email: string, pass: string) {
+    const user = await this.userService.findOneByEmail(email);
+    if (!user) {
+      return null;
     }
 
-    public async login(user) {
-        const token = await this.generateToken(user);
-        return { user, token };
+    const match = await this.comparePassword(pass, user.password);
+    if (!match) {
+      return null;
     }
 
-    public async create(user) {
-       try {
-        const pass = await this.hashPassword(user.password);
+    const { password, ...result } = user.dataValues;
+    return result;
+  }
 
-        const newUser = await this.userService.create({ ...user, password: pass });
+  public async login(user) {
+    const token = await this.generateToken(user);
+    return { user, token };
+  }
 
-        const { password, ...result } = newUser.dataValues
+  public async create(user) {
+    try {
+      const pass = await this.hashPassword(user.password);
 
-        const token = await this.generateToken({id:result.id, email:result.email});
-        this.sendSignUpEmail(user,)
+      const newUser = await this.userService.create({
+        ...user,
+        password: pass,
+      });
 
-        return { user: result, token };
-       } catch (error) {
-        console.log(error, 'error')
-       }
+      const { password, ...result } = newUser.dataValues;
+
+      const token = await this.generateToken({
+        id: result.id,
+        email: result.email,
+      });
+      this.sendSignUpEmail(user);
+
+      return { user: result, token };
+    } catch (error) {
+      console.log(error, 'error');
     }
+  }
 
-    private async generateToken(user : Token) {
-        const token = await this.jwtService.sign({...user}, {secret: process.env.JWTKEY, expiresIn:'10mins'});
-        return token;
-    }
+  private async generateToken(user: Token) {
+    const token = await this.jwtService.sign(
+      { ...user },
+      { secret: process.env.JWTKEY, expiresIn: '10mins' },
+    );
+    return token;
+  }
 
-    private async hashPassword(password) {
-        const hash = await bcrypt.hash(password, 10);
-        return hash;
-    }
+  private async hashPassword(password) {
+    const hash = await bcrypt.hash(password, 10);
+    return hash;
+  }
 
-    private async comparePassword(enteredPassword, dbPassword) {
-        const match = await bcrypt.compare(enteredPassword, dbPassword);
-        return match;
-    }
-    async sendSignUpEmail(user: IMail) {
-        const token = Math.floor(1000 + Math.random() * 9000).toString();
-        await this.mailService.sendUserConfirmation(user, token);
-      }
-    
+  private async comparePassword(enteredPassword, dbPassword) {
+    const match = await bcrypt.compare(enteredPassword, dbPassword);
+    return match;
+  }
+  async sendSignUpEmail(user: IMail) {
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    await this.mailService.sendUserConfirmation(user, token);
+  }
 }
