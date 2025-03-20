@@ -28,7 +28,7 @@ export class AuthService {
       return null;
     }
 
-    const { password, ...result } = user.dataValues;
+    const { ...result } = user.dataValues;
     return result;
   }
 
@@ -46,7 +46,7 @@ export class AuthService {
         password: pass,
       });
 
-      const { password, ...result } = newUser.dataValues;
+      const { ...result } = newUser.dataValues;
 
       const token = await this.generateToken({
         id: result.id,
