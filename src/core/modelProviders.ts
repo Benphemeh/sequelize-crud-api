@@ -1,7 +1,7 @@
 
 import { POST_REPOSITORY, USER_REPOSITORY } from "./constants";
-import Post from "./database/models/post";
-import User from "./database/models/user";
+import Post from "./database/models/post.model";
+import User from "./database/models/user.model";
 
 
 export const modelProviders = [{

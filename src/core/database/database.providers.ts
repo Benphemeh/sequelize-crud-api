@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
 import { databaseConfig } from './database.config';
-import User from './models/user';
-import Post from './models/post';
+import User from './models/user.model';
+import Post from './models/post.model';
 
 export const databaseProviders = [
   {

@@ -6,7 +6,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import User from './user';
+import User from './user.model';
 
 @Table
 export default class Post extends Model<Post> {
