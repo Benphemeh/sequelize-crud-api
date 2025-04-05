@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
@@ -17,8 +17,8 @@ export class UserController {
   //   return this.userService.findAll();
   // }
 
-  // @Get(':id')
-  // findUserById(@Param('id') id: string): string {
-  //   return this.userService.findById(id);
-  // }
+  @Get(':id')
+  findUserById(@Param('id') id: string): Promise<User> {
+    return this.userService.findOneById(Number(id));
+  }
 }
